@@ -81,9 +81,6 @@ def main():
         print('max label right now is: {}'.format(np.max(labels)))
         print('')
 
-        if features.shape[0] >= 1000:
-            break
-
     print('All done, writing to file')
 
     np.save('features.npy', features)
