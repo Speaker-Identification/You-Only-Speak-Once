@@ -33,7 +33,7 @@ def get_mfccs(audio_file):
     y, sr = librosa.load(audio_file, sr=None)
     assert sr == 16000
 
-    # frame width of 25 ms with a stride of 15 ms. This will have an overlap of
+    # frame width of 25 ms with a stride of 15 ms. This will have an overlap of 10s
     mfccs = librosa.feature.mfcc(y, sr, n_mfcc=13, hop_length=int(0.015 * sr), n_fft=int(0.025 * sr))
     mfcc_delta = librosa.feature.delta(mfccs, order=1)
     mfcc_delta_delta = librosa.feature.delta(mfccs, order=2)
@@ -49,8 +49,8 @@ def get_mfccs(audio_file):
 
 
 def main():
-    features = None
-    labels = None
+    features = []
+    labels = []
     speakers = read_metadata()
     
     print('read metadata from file, number of rows in in are: {}'.format(speakers.shape))
@@ -70,16 +70,17 @@ def main():
 
         for f in files_:
             mfccs = get_mfccs(f)
-            if features is None:
-                features = mfccs
-                labels = np.full(mfccs.shape[0], index, dtype=np.uint8)
-            else:
-                features = np.append(features, mfccs, axis=0)
-                labels = np.append(labels, np.full(mfccs.shape[0], index, dtype=np.uint8), axis=0)
+            features.append(mfccs)
+            labels.append(np.full(mfccs.shape[0], index, dtype=np.int32))
 
-        print('done for id: {}, index: {}, current shape of features: {}, labels: {}'.format(id_, index, features.shape, labels.shape))
-        print('max label right now is: {}'.format(np.max(labels)))
+        print('done for id: {}, index: {}, current shape of features: {}, labels: {}'.format(id_, index, len(features), len(labels)))
         print('')
+
+    print('Read everything to lists, concatanating everything to single numpy array')
+    features = np.concatenate(features, axis=0)
+    labels = np.concatenate(labels, axis=0)
+
+    print('All Done, shape of features: {}'.format(features.shape))
 
     print('All done, writing to file')
 
