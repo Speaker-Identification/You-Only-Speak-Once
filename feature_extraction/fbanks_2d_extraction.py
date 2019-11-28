@@ -97,13 +97,18 @@ def main():
             start = 0
             while start < num_frames + 64:
                 slice_ = fbanks[start:start + 64]
-                np.save(index_target_dir + '/' + str(sample_counter) + '.npy', slice_)
+                if slice_ is not None and slice_.shape[0] == 64:
+                    assert slice_.shape[0] == 64
+                    assert slice_.shape[1] == 64
+                    assert slice_.shape[2] == 1
+                    np.save(index_target_dir + '/' + str(sample_counter) + '.npy', slice_)
+
+                    file_sample_counter += 1
+                    sample_counter += 1
+
                 start = start + 64
 
-                file_sample_counter += 1
-                sample_counter += 1
-
-            print('done for index: {} file: {}. Samples from this file'.format(index, file_sample_counter))
+            print('done for index: {}, Samples from this file: {}'.format(index, file_sample_counter))
 
         print('done for id: {}, index: {}, total number of samples for this id: {}'.format(id_, index, sample_counter))
         print('')
