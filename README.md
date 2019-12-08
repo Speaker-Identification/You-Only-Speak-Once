@@ -20,7 +20,7 @@ We used a subset of the LibriSpeech corpus that comprises of 100 hours of clean 
 
 We split the audio samples into frames of 5 seconds using a stride of 4 seconds. For each of these frames, we extracted spectrograms of dimensions 227 x 227 x 1, which served as inputs into our Neural Network. Next we split the dataset into a train-set comprising of 200 speakers and a test-set with 50 speakers, with each speaker being represented by ~250 spectrograms.
  
-![alt text](https://github.com/Speaker-Identification/You-Only-Speak-Once/blob/master/images/model_spectrogram.png)
+![alt text](images/model_spectrogram.png)
 
 #### Model Training: 
 
@@ -29,7 +29,7 @@ When we trained this network using Contrastive Loss, we had to rely on defining 
 
 #### Results: The final version of this network used cross-entropy loss and the train test accuracies are plotted for 50 epochs in the adjacent figure. The first iteration of this Neural Network training resulted in a huge gap between the train and test accuracies warranting the introduction of dropout layers. However, dropout pushed both train and test accuracies to lower levels, although it did bring them closer to each other. 
  
-![alt text](https://github.com/Speaker-Identification/You-Only-Speak-Once/blob/master/images/spectrogram_accuracy.png)
+![alt text](images/spectrogram_accuracy.png)
  
 ### FBankNet:
 
@@ -37,30 +37,40 @@ When we trained this network using Contrastive Loss, we had to rely on defining 
 
 We split each audio file into frames of 25ms with a stride of 10ms. Given the small frame width, it's safe to assume that the signal would be constant and can be accurately transformed to the frequency domain. We calculated the first 64 FBank coefficients from each sample and grouped 64 frames together to generate a training sample of size 64 x 64 x 1 as inputs to Conv2D. Total number of samples obtained was more than half a million which was split into 95% and 5% for train and test respectively.
  
-![alt text](https://github.com/Speaker-Identification/You-Only-Speak-Once/blob/master/images/model_fbanknet.png)
+![alt text](images/model_fbanknet.png)
 
 #### Model Training: 
 
 We used a CNN with residual blocks (shown in the figure above) comprising of 20890 parameters. Training was done in two stages: a multi class classification using Cross-Entropy loss followed by fine tuning using Triplet Loss. The network with a triplet loss layer expects three inputs: a random sample from the dataset called anchor, a sample from the same class as anchor called positive, and a sample from class other than the class of anchor, called negative.
-Mathematically, this loss is defined as max(d(a,p)-d(a,n)+margin,0), where d is the cosine distance.
+Mathematically, this loss is defined as 
+```
+max(d(a,p) - d(a,n) + margin, 0)
+```
+, where `d` is the cosine distance.
 
-![alt text](https://github.com/Speaker-Identification/You-Only-Speak-Once/blob/master/images/lr_table.png)
+![alt text](images/lr_table.png)
 
 Pre-training was performed using a batch size of 32 with varying learning rates tabulated above.
 
 We used these pre-trained weights as the initialization for fine tuning using triplet loss with a margin of 0.2 and fine-tuned for 20 epochs with a learning rate of 0.0005.
-To compare any two samples, we had to come up with a distance threshold, below which these samples would be similar. During training we recorded anchor-positive (AP) and anchor-negative (AN) distances over all samples and observed that they were roughly gaussian.
-d(AP) ~ N(0.39, 0.02), d(AN) ~ N(0.93, 0.04)
-We chose μAP +  3 𝜎AP  to be a safe threshold as it was far enough from μAN.
+To compare any two samples, we had to come up with a distance threshold, below which these samples would be similar. During training we recorded anchor-positive (*AP*) and anchor-negative (*AN*) distances over all samples and observed that they were roughly gaussian.
+```
+d(AP) ~ N(0.39, 0.02)
+d(AN) ~ N(0.93, 0.04)
+```
+We chose μ<sub>*AP*</sub> +  3 𝜎<sub>*AP*</sub>  to be a safe threshold as it was far enough from μ<sub>*AN*</sub>.
 
 #### Results: 
 
 We used two metrics to measure accuracy:
-Positive accuracy   = TP / (TP + FN)
+```
+Positive accuracy = TP / (TP + FN)
 Negative accuracy = TN / (TN + FP)
-Since we’re building an authentication system, we are more cautious of false positives than false negatives, to ensure not allowing access to imposters. Hence our model is optimized to minimize negative accuracy. After fine tuning for 20 epochs, the model achieved ~97% negative accuracy and ~74% positive accuracy (see adjacent figure).
+```
 
-![alt text](https://github.com/Speaker-Identification/You-Only-Speak-Once/blob/master/images/fbanknet_accuracy.png)
+Since we’re building an authentication system, we are more cautious of false positives than false negatives, to ensure not allowing access to imposters. Hence our model is optimized to maximize negative accuracy. After fine tuning for 20 epochs, the model achieved ~97% negative accuracy and ~74% positive accuracy (see adjacent figure).
+
+![alt text](images/fbanknet_accuracy.png)
 
 ## Conclusion
 
