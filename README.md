@@ -1,5 +1,5 @@
 # You Only Speak Once
-## Deep Learning final project
+## One Shot Learning using Siamese Network for Speaker Recognition
 
 ## Introduction
 Biometric authentication systems rely on some kind of visual input, such as fingerprints and Face ID. However, devices like Alexa only receive audio as input that can be leveraged for authentication.
