@@ -8,6 +8,39 @@
   </head>
   <body>
     <h1>You Only Speak Once</h1>
+    <p></p>
+    <h4>How to use this demo?</h4>
+    <small id="expandCollapse">Expand / Collapse ></small>
+    <div id="howTo">
+        <p>
+            This webapp for demo is brittle with absolutely no thoughts given to UX.
+            Read the instructions to use this demo!
+        </p>
+
+        <p>
+            Register
+            <ol>
+                <li>select register in the "Choose Action" dropdown, fill in a username</li>
+                <li>press record and start saying something. (microphone recommended). When done press submit</li>
+                <li>Click, submit, you will get a successful register message</li>
+            </ol>
+        </p>
+        <p>
+            Authenticate
+            <ol>
+                <li>Reload page to clear recording</li>
+                <li>select login in the "Choose Action" dropdown, fill in a registered username</li>
+                <li>press record and start saying something. (microphone recommended). When done press submit</li>
+                <li>Click, submit, you will get a message saying if the voice is authenticated</li>
+            </ol>
+        </p>
+
+        <p>
+            You can say anything in any language. The "Read this" section is a random wiki article to help if you
+            don't know what to say. While registering, a recording of 10-15 second is recommended. While authenticating
+            a recording of 3-8 second is recommended.
+        </p>
+    </div>
 
     <div id="actionDiv">
         <label for="action">Choose Action</label>
@@ -15,7 +48,7 @@
             <option value="login">Login</option>
             <option value="register">Register</option>
         </select>
-        <input id="username" type="text" placeholder="Enter Your Username" required>
+        <input id="username" type="text" placeholder="Enter Your Username" required />
 
     </div>
 
