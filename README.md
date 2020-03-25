@@ -77,3 +77,11 @@ Since we’re building an authentication system, we are more cautious of false p
 We successfully trained two distinct Siamese Networks with the aim of one shot learning. These networks were able to identify new users with a fairly high accuracy, and we exhibited this in the demos we ran with multiple users, with varying accents and styles of speaking, in a pretty noisy environment during the poster session. We have also been able to leverage multiple loss functions, such as triplet, contrastive and softmax.
 However, our training data could be augmented in ways to add background noise, in order to make the model more robust. Furthermore, we also aim to run deeper networks on larger datasets with various combinations of channels in the convolutional layers and add a more thorough hyper-parameter search.
 
+## Demo
+
+Demo can be run by using docker.
+```shell script
+$ docker build -t yoso .
+$ docker run --rm -p 5000:5000 yoso
+```
+Navigate to http://localhost:5000 and follow instructions
