@@ -30,10 +30,10 @@ def login(username):
     stored_embeddings = stored_embeddings.reshape((1, -1))
 
     distances = get_cosine_distance(embeddings, stored_embeddings)
-    print('mean distances', np.mean(distances))
+    print('mean distances', np.mean(distances), file=sys.stdout)
     positives = distances < THRESHOLD
     positives_mean = np.mean(positives)
-    print('positives mean: {}'.format(positives_mean))
+    print('positives mean: {}'.format(positives_mean), file=sys.stdout)
     if positives_mean >= .65:
         return Response('SUCCESS', mimetype='application/json')
     else:
@@ -45,6 +45,7 @@ def register(username):
     filename = _save_file(request, username)
     fbanks = extract_fbanks(filename)
     embeddings = get_embeddings(fbanks)
+    print('shape of embeddings: {}'.format(embeddings.shape), file=sys.stdout)
     mean_embeddings = np.mean(embeddings, axis=0)
     np.save(DATA_DIR + username + '/embeddings.npy', mean_embeddings)
     return Response('', mimetype='application/json')
