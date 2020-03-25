@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>YOSO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+  </head>
+  <body>
+    <h1>You Only Speak Once</h1>
+
+    <div id="actionDiv">
+        <label for="action">Choose Action</label>
+        <select id="action">
+            <option value="login">Login</option>
+            <option value="register">Register</option>
+        </select>
+        <input id="username" type="text" placeholder="Enter Your Username" required>
+
+    </div>
+
+    <div id="controls">
+  	 <button id="recordButton">Record</button>
+  	 <button id="pauseButton" disabled>Pause</button>
+  	 <button id="stopButton" disabled>Stop</button>
+    </div>
+    <div id="formats">Format: start recording to see sample rate</div>
+  	<h3>Recordings</h3>
+  	<ol id="recordingsList"></ol>
+
+    <button type="button" id="submitButton" value="Submit">Submit</button>
+
+    <p>
+      <h2 id="result"></h2>
+    </p>
+
+    <h3>Read this!</h3>
+    <p id="readingText"></p>
+
+
+    <p>
+      <small>Demo Uses Matt Diamond's <a href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a>,
+        a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav
+        containers.
+
+      It is build upon the Recorder JS demo by <a href="https://github.com/addpipe/simple-recorderjs-demo">addpipe.com</a>
+      </small>
+
+    </p>
+
+    <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+  	<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+  	<script src="../static/js/app.js"></script>
+    <script type="text/javascript">
+        loadWikiArticle()
+    </script>
+
+  </body>
+</html>
