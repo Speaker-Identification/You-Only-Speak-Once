@@ -7,7 +7,7 @@ from torch import optim
 from torch.utils.data import DataLoader
 
 from .cross_entropy_dataset import FBanksCrossEntropyDataset
-from .cross_entropy_model import FBankCrossEntropyNey
+from .cross_entropy_model import FBankCrossEntropyNet
 from ..pt_util import restore_objects, save_model, save_objects, restore_model
 
 
@@ -87,7 +87,7 @@ def main():
     test_dataset = FBanksCrossEntropyDataset('fbanks_test')
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True, **kwargs)
 
-    model = FBankCrossEntropyNey(reduction='mean').to(device)
+    model = FBankCrossEntropyNet(reduction='mean').to(device)
     model = restore_model(model, model_path)
     last_epoch, max_accuracy, train_losses, test_losses, train_accuracies, test_accuracies = restore_objects(model_path, (0, 0, [], [], [], []))
     start = last_epoch + 1 if max_accuracy > 0 else 0

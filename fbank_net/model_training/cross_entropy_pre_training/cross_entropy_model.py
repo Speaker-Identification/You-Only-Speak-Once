@@ -3,7 +3,7 @@ from torch import nn
 from fbank_net.model_training.base_model import FBankNet
 
 
-class FBankCrossEntropyNey(FBankNet):
+class FBankCrossEntropyNet(FBankNet):
     def __init__(self, reduction='mean'):
         super().__init__()
         self.loss_layer = nn.CrossEntropyLoss(reduction=reduction)
