@@ -200,9 +200,5 @@ document.getElementById("howTo").hidden = true
 
 document.getElementById("expandCollapse").onclick = function () {
 	let howToHidden = document.getElementById("howTo").hidden;
-	if (howToHidden) {
-		document.getElementById("howTo").hidden = false
-	} else {
-		document.getElementById("howTo").hidden = true
-	}
+	document.getElementById("howTo").hidden = !howToHidden;
 }
