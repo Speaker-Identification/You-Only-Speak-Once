@@ -80,8 +80,9 @@ However, our training data could be augmented in ways to add background noise, i
 ## Demo
 
 Demo can be run by using docker.
-```shell script
-$ docker build -t yoso .
-$ docker run -e --rm -p 5000:5000 yoso
+Make sure that you have AWS Credentials stored at `~/.aws/credentials`.
+
+```bash
+docker build -t yoso .
+docker run -v ~/.aws/:/root/.aws:ro --env S3_BUCKET='xyz' --rm -p 5000:5000 -p 443:443 -p 80:80 yoso
 ```
-Navigate to http://localhost:5000 and follow instructions

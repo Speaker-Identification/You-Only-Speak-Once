@@ -1,14 +1,8 @@
 FROM python:3.6-stretch
 
-RUN pip install numpy==1.16.6
-RUN pip install flask==1.1.1
 RUN pip install torch==1.4.0+cpu torchvision==0.5.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install boto3
-RUN pip install python-decouple
-RUN pip install numba==0.48
-RUN pip install librosa==0.7.2
-RUN pip install python-speech-features==0.6
-
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 RUN apt-get update -y
 RUN apt-get install -y libsndfile1
 
@@ -26,5 +20,17 @@ ENV FLASK_APP="demo/app.py"
 WORKDIR /fbank_net
 
 EXPOSE 5000
+EXPOSE 443
+EXPOSE 80
 
-CMD ["flask", "run", "--host", "0.0.0.0"]
+# Install Caddy
+RUN apt install -y debian-keyring debian-archive-keyring apt-transport-https
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+RUN apt update
+RUN apt install caddy
+
+COPY entrypoint.sh entrypoint.sh
+RUN chmod u+x entrypoint.sh
+
+CMD ["bash", "entrypoint.sh"]

@@ -1,0 +1,7 @@
+numpy==1.16.6
+flask==1.1.1
+numba==0.48
+librosa==0.7.2
+python-speech-features==0.6
+boto3==1.23.10
+python-decouple==3.6
