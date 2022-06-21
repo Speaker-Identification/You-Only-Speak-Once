@@ -70,8 +70,14 @@ def _save_file(request_, username):
     filename = DATA_DIR + username + '/sample.wav'
     file.save(filename)
 
-    result = s3.meta.client.put_object(Body=file, Bucket='live-sentiment-data', Key='audio-samples')
+    result = s3.meta.client.put_object(Body=file, Bucket='live-sentiment-data', Key="audio-samples/"+str(username)+".wav")
     res = result.get('ResponseMetadata')
+
+    # my_bucket = s3.Bucket('live-sentiment-data',Key = "audio-samples")
+
+    # for my_bucket_object in my_bucket.objects.all():
+    #     print(my_bucket_object.key , flush=True)
+
 
     if res.get('HTTPStatusCode') == 200:
         print('File Uploaded Successfully')
