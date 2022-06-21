@@ -80,10 +80,10 @@ However, our training data could be augmented in ways to add background noise, i
 ## Demo
 
 Demo can be run by using docker.
-you need Aws_Access_Key_Id and Aws_Secret_Access_Key of s3 bucket.
-create an .env file inside demo folder and set values of these two variable before running docker file
-```shell script
-$ docker build -t yoso .
-$ docker run -e --rm -p 5000:5000 yoso
+Make sure that you have AWS Credentials stored at `~/.aws/credentials`.
+
+```bash
+docker build -t yoso .
+docker run -v ~/.aws/:/root/.aws:ro --env S3_BUCKET='xyz' --rm -p 5000:5000 yoso
 ```
 Navigate to http://localhost:5000 and follow instructions
