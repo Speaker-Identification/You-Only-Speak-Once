@@ -1,14 +1,21 @@
 import os
 import sys
 import logging
+import boto3
+from decouple import config
 
 import numpy as np
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response,jsonify
 
 from .preprocessing import extract_fbanks
 from .predictions import get_embeddings, get_cosine_distance
 
 app = Flask(__name__)
+session = boto3.Session(
+    aws_access_key_id= config('Aws_Access_Key_Id'),
+    aws_secret_access_key= config('Aws_Secret_Access_Key')
+)
+s3 = session.resource('s3')
 
 DATA_DIR = 'data_files/'
 THRESHOLD = 0.45    # play with this value. you may get better results
@@ -25,6 +32,8 @@ def home():
 def login(username):
 
     filename = _save_file(request, username)
+    print('filename ', filename, flush=True)
+
     fbanks = extract_fbanks(filename)
     embeddings = get_embeddings(fbanks)
     stored_embeddings = np.load(DATA_DIR + username + '/embeddings.npy')
@@ -35,10 +44,10 @@ def login(username):
     positives = distances < THRESHOLD
     positives_mean = np.mean(positives)
     print('positives mean: {}'.format(positives_mean), flush=True)
-    if positives_mean >= .65:
-        return Response('SUCCESS', mimetype='application/json')
+    if positives_mean >= 0.65:
+        return jsonify(username=username,result="true")
     else:
-        return Response('FAILURE', mimetype='application/json')
+        return jsonify(username=username,result="false")
 
 
 @app.route('/register/<string:username>', methods=['POST'])
@@ -49,7 +58,7 @@ def register(username):
     print('shape of embeddings: {}'.format(embeddings.shape), flush=True)
     mean_embeddings = np.mean(embeddings, axis=0)
     np.save(DATA_DIR + username + '/embeddings.npy', mean_embeddings)
-    return Response('', mimetype='application/json')
+    return Response('registered', mimetype='application/json')
 
 
 def _save_file(request_, username):
@@ -60,4 +69,13 @@ def _save_file(request_, username):
 
     filename = DATA_DIR + username + '/sample.wav'
     file.save(filename)
+
+    result = s3.meta.client.put_object(Body=file, Bucket='live-sentiment-data', Key='audio-samples')
+    res = result.get('ResponseMetadata')
+
+    if res.get('HTTPStatusCode') == 200:
+        print('File Uploaded Successfully')
+    else:
+        print('File Not Uploaded')
     return filename
+

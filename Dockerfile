@@ -3,6 +3,8 @@ FROM python:3.6-stretch
 RUN pip install numpy==1.16.6
 RUN pip install flask==1.1.1
 RUN pip install torch==1.4.0+cpu torchvision==0.5.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip install boto3
+RUN pip install python-decouple
 RUN pip install numba==0.48
 RUN pip install librosa==0.7.2
 RUN pip install python-speech-features==0.6
@@ -16,6 +18,7 @@ COPY fbank_net/weights /fbank_net/weights
 RUN touch /fbank_net/__init__.py
 
 RUN mkdir /fbank_net/data_files
+
 
 ENV PYTHONPATH="/fbank_net"
 ENV FLASK_APP="demo/app.py"
