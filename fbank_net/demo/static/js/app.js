@@ -5,7 +5,7 @@ var gumStream; 						//stream from getUserMedia()
 var rec; 							//Recorder.js object
 var input; 							//MediaStreamAudioSourceNode we'll be recording
 
-// shim for AudioContext when it's not avb. 
+// shim for AudioContext when it's not avb.
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
 
@@ -25,11 +25,11 @@ function startRecording() {
 		Simple constraints object, for more advanced audio features see
 		https://addpipe.com/blog/audio-constraints-getusermedia/
 	*/
-    
+
     var constraints = { audio: true, video:false }
 
  	/*
-    	Disable the record button until we get a success or fail from getUserMedia() 
+    	Disable the record button until we get a success or fail from getUserMedia()
 	*/
 
 	recordButton.disabled = true;
@@ -183,13 +183,8 @@ function createDownloadLink(blob) {
 }
 
 var loadWikiArticle = function (e) {
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'https://en.wikipedia.org/api/rest_v1/page/random/summary', true);
-	xhr.onloadend = function (e) {
-		var res = JSON.parse(e.target.responseText);
-		document.getElementById('readingText').innerText = res['extract'];
-	};
-	xhr.send();
+	document.getElementById('readingText').innerText ="Voice biometrics is the science of using a person’s voice as a uniquely identifying biological characteristic in order to authenticate them. Also referred to as voice verification or speaker recognition, voice biometrics enables fast, frictionless and highly secure access for a range of use cases from call center, mobile and online applications to chatbots, IoT devices and physical access.";
+
 
 };
 
